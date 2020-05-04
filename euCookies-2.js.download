@@ -1,0 +1,38 @@
+
+/**/var euCookies = {
+ cookiePopupDraw: function(){
+     var $body = $('body');
+     var $header = $('header');
+  //Apply class to body for styles
+        $body.addClass("cookie");
+  //Draw cookie popup
+  var cookiePopup = "<div class='cookiePopup'><div class='cookiePopupContents clear'><p class='dialogue'>We use cookies to make our site work correctly, to help understand how it is used and to provide more relevant ads on Jagex websites and others. By continuing to use the site you consent to the use of first and third-party cookies and other similar technologies. To learn more please visit our <a href='https://www.jagex.com/g=runescape/terms/privacy' target='_blank'>privacy policy</a> and our <a href='https://www.jagex.com/g=runescape/terms/cookies' target='_blank'>cookie policy</a>.</p><div class='closeCookieContainer'><a href='#' class='closeCookiePopup'>Got it</a></div></div></div>";
+  // Checking for a variable set on old school homepage because we want to put the popup in a different place due to the DOM structures being different in various places
+        if (typeof cookiePopupOldschool !== 'undefined') {
+            $body.prepend(cookiePopup);
+        } else {
+            $header.prepend(cookiePopup);
+        }
+ },
+    setCookie: function(){
+        $.cookie('jagex_accept_cookies', true, { expires: 3650, path: '/', domain: "runescape.com"});
+    },
+ cookiePopupHide: function(){
+  $('.cookiePopup').slideUp("fast");
+  $('body').removeClass("cookie");
+ },
+ init: function(){
+  //Check if cookie is not set
+  if($.cookie('jagex_accept_cookies') == null){
+   euCookies.cookiePopupDraw();
+
+   //Listen for the close button being clicked
+   $('.closeCookieContainer').click(function(ev){
+    ev.preventDefault();
+    euCookies.cookiePopupHide();
+    euCookies.setCookie();
+   });
+  }
+ }
+};
+euCookies.init();
